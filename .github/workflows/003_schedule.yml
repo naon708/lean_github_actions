@@ -1,4 +1,4 @@
-name: Daily Report (UTC 02:30 -> JST 11:30)
+name: Daily Report
 
 on:
   schedule:
