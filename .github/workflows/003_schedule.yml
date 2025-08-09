@@ -1,0 +1,43 @@
+name: Daily Report (UTC 02:30 -> JST 11:30)
+
+on:
+  schedule:
+    - cron: "30 2 * * *"   # UTC 02:30 = JST 11:30
+  workflow_dispatch:        # 手動テスト用（今すぐ実行）
+
+concurrency:
+  group: daily # 同じグループのworkflowは並行実行されない設定
+  cancel-in-progress: true  # 前回が走ってたらそっちをキャンセル
+
+jobs:
+  daily_report:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # JSTで日付を作ってファイル名に埋め込む（例: 20250809_report.txt）
+      - name: Set filename (JST) # ファイル名を作成するstep
+        id: vars # このstepの出力を後続のstepで使うためにidを付与
+        run: |
+          DATE=$(TZ=Asia/Tokyo date +'%Y%m%d')
+          FILENAME="${DATE}_report.txt"
+          echo "date=$DATE" >> "$GITHUB_OUTPUT"
+          echo "filename=$FILENAME" >> "$GITHUB_OUTPUT"
+
+      - name: Create report # ファイルを作成するstep
+        run: |
+          FILE="${{ steps.vars.outputs.filename }}"
+          echo "Run at (UTC): $(date -u +'%Y-%m-%dT%H:%M:%SZ')" > "$FILE"
+          echo "Run at (JST): $(TZ=Asia/Tokyo date +'%Y-%m-%d %H:%M:%S %Z')" >> "$FILE"
+          echo "Commit: $GITHUB_SHA" >> "$FILE"
+          echo "Branch/Ref: $GITHUB_REF" >> "$FILE"
+          echo "Runner: ${{ runner.os }}" >> "$FILE"
+
+      - name: Upload artifact # アーティファクトを保存するstep
+        uses: actions/upload-artifact@v4 # アーティファクトを保存するaction
+        with: # アーティファクトを保存するための設定
+          # アーティファクト名にも日付をつけて見つけやすく
+          name: daily-report-${{ steps.vars.outputs.date }}
+          path: ${{ steps.vars.outputs.filename }}
+          retention-days: 14 # 保存期間の上書き
+          if-no-files-found: error # 想定外の空アップロードを失敗扱いにする
