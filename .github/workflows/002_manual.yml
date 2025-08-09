@@ -1,0 +1,18 @@
+name: Manual Run
+on:
+  workflow_dispatch: # 手動で実行するためのトリガー
+    inputs: # フォーム入力
+      message: # フォームの名前
+        description: "What your name?" # フォームの説明
+        required: true # 入力が必須かどうか
+      message_2:
+        description: "Say something"
+        required: false
+        default: "Hello manual run" # 入力のデフォルト値
+jobs: 
+  run: # jobの名前
+    runs-on: ubuntu-latest # jobを実行する環境
+    steps:
+      - run: |
+          echo "Message: ${{ inputs.message }}, ${{ inputs.message_2 }}"
+          pwd
