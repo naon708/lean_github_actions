@@ -1,0 +1,15 @@
+name: Hello Actions # このワークフローの名前
+on: # このワークフローが実行される条件
+  push: # pushされたら実行
+    branches: [ main ]   # mainブランチにpushされたら実行
+
+jobs: # このワークフローで実行するjob
+  hello: # jobの名前
+    runs-on: ubuntu-latest # jobを実行する環境
+    steps: # jobで実行するstep
+      - uses: actions/checkout@v4   # リポジトリの中身をrunnerにチェックアウト
+      - name: Print context # stepの名前
+        run: |
+          echo "Hello from $GITHUB_REF on ${{ runner.os }}"
+          echo "Actor: $GITHUB_ACTOR"
+          pwd && ls -la
