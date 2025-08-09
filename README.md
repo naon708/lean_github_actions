@@ -23,3 +23,12 @@ drwxr-xr-x 3 runner docker 4096 Aug  9 01:29 .github
 > プライベートのリポジトリの場合: この保持期間を 1 から 400 日の間で変更できます。
 
 日次実行だったら余裕。
+
+## スケジュールjobの出力
+```shell
+Run at (UTC): 2025-08-09T02:23:42Z
+Run at (JST): 2025-08-09 11:23:42 JST
+Commit: 41770804bf8de5f59b0e2bce9f68d455d204dfb8
+Branch/Ref: refs/heads/main
+Runner: Linux
+```
