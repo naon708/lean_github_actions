@@ -3,7 +3,8 @@ name: Daily Report (UTC 02:30 -> JST 11:30)
 on:
   schedule:
     # - cron: "30 2 * * *"   # UTC 02:30 = JST 11:30
-    - cron: "*/10 * * * *" # 10分ごとに実行
+    # - cron: "*/10 * * * *" # 10分ごとに実行
+    - cron: "3,13,23,33,43,53 * * * *" # 10分ごとに実行（混雑を防ぐため3分のオフセット）
   workflow_dispatch:        # 手動テスト用（今すぐ実行）
 
 concurrency:
