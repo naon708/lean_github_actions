@@ -10,7 +10,7 @@ on:
         required: false
         default: "Hello manual run" # 入力のデフォルト値
 jobs: 
-  run: # jobの名前
+  greet: # jobの名前
     runs-on: ubuntu-latest # jobを実行する環境
     steps:
       - run: |
